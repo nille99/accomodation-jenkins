@@ -28,8 +28,9 @@ pipeline {
      //Clean databas
      stage('Clean databas'){
             steps{
-                sh 'psql -h lockalhost -U postgres hotel -f /home/robot/.jenkins/workspace/test-jenkins-pipeline/hoteljsf/database-backup.sql'            
+               sh 'psql -h localhost -U postgres hotel -f /home/robot/.jenkins/workspace/test-jenkins-pipeline/hoteljsf/database-backup.sql'
             }
         }
+
     }
 }
