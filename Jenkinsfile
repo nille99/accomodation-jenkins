@@ -1,44 +1,45 @@
-pipeline {
-    agent any 
+pipeline{
+    agent any
     stages{
         stage('Checkout'){
             steps{
                 checkout scm
             }
-        }
-     //Bulding the web-app
-     stage('Build web-app'){
+        }          
+        //Building the web-app
+        stage('Build web-app'){
             steps{
                 sh 'mvn -f /home/robot/.jenkins/workspace/test-jenkins-pipeline/hoteljsf clean install'
             }
         }
-      //Bulding the web-service
-     stage('Build web-service'){
+         //Building the web-service
+        stage('Build web-service'){
             steps{
                 sh 'mvn -f /home/robot/.jenkins/workspace/test-jenkins-pipeline/hotel-restfull clean install'
             }
         }
-    //Deploy the artifacts on glassfish
-     stage('Deploy the artifacts'){
+        //Deploy the artifacts on glassfish
+        stage('Deploy artifacts'){
             steps{
-               sh 'asadmin deploy --force=true /home/robot/.jenkins/workspace/test-jenkins-pipeline/hotel-restfull/target/hotel-rest.war'
+                sh 'asadmin deploy --force=true /home/robot/.jenkins/workspace/test-jenkins-pipeline/hotel-restfull/target/hotel-rest.war'
                 sh 'asadmin deploy --force=true /home/robot/.jenkins/workspace/test-jenkins-pipeline/hoteljsf/target/hotel.war'
             }
         }
-     //Clean databas
-     stage('Clean databas'){
+        
+        //Clean database
+        stage('Clean database'){
             steps{
                sh 'psql -h localhost -U postgres hotel -f /home/robot/.jenkins/workspace/test-jenkins-pipeline/hoteljsf/database-backup.sql'
             }
         }
-
-         //Frontend tests
+        
+        //Frontend tests
         stage('Frontend tests'){
             steps{
-               sh 'robot -d out-frontend --output output-frontend.xml /home/robot/.jenkins/workspace/test-jenkins-pipeline/robotframework-frontend/00_regression_tests.robot'
+               sh 'robot -d out-frontent --output output-frontend.xml /home/robot/.jenkins/workspace/test-jenkins-pipeline/robotframework-frontend/00_regression_tests.robot'
             }
         }
-           //Running the backend tests
+        //Running the backend tests
         stage('Backend tests'){
             steps{
                 sh 'robot -d out-backend --output output-backend.xml robotframework-backend/00_Regression_tests.robot'
@@ -65,7 +66,7 @@ pipeline {
 				unstableThreshold: 95.0,
 				otherFiles : "*.png",
 			])
-		}    
-	    }
+		}           
+               	 	
     }
 }
