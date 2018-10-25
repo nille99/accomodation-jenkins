@@ -32,5 +32,11 @@ pipeline {
             }
         }
 
+         //Frontend tests
+        stage('Frontend tests'){
+            steps{
+               sh 'robot -d out-frontent --output output-frontend.xml /home/robot/.jenkins/workspace/test-jenkins-pipeline/robotframework-frontend/00_regression_tests.robot'
+            }
+        }
     }
 }
