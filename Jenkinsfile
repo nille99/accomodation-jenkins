@@ -21,8 +21,8 @@ pipeline {
     //Deploy the artifacts on glassfish
      stage('Deploy the artifacts'){
             steps{
-                sh 'asadmin deploy --force=true /home/robot/.jenkins/workspace/test-jenkins-pipeline/hotel-restfull/target/hotel-rest.war'
-                sh 'asadmin deploy --force=true /home/robot/.jenkins/workspace/test-jenkins-pipeline/hoteljsf/target/hotel-rest.war'
+                sh 'asadmin deploy -- force=true /home/robot/.jenkins/workspace/test-jenkins-pipeline/hotel-restfull/target/hotel-rest.war'
+                sh 'asadmin deploy -- force=true /home/robot/.jenkins/workspace/test-jenkins-pipeline/hoteljsf/target/hotel-rest.war'
             }
         }
      //Clean databas
