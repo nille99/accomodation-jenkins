@@ -38,5 +38,33 @@ pipeline {
                sh 'robot -d out-frontent --output output-frontend.xml /home/robot/.jenkins/workspace/test-jenkins-pipeline/robotframework-frontend/00_regression_tests.robot'
             }
         }
+           //Running the backend tests
+        stage('Backend tests'){
+            steps{
+                sh 'robot -d out-backend --output output-backend.xml robotframework-backend/00_Regression_tests.robot'
+            }            
+        }
+    }
+    
+    //post actions
+    post { 
+        always { 
+                //Saving the artifacts
+				archiveArtifacts '**/**.war'
+                
+                //Processing the test reports into one
+				sh 'rebot -d output --output out.xml out-backend/output-backend.xml out-frontend/output-frontend.xml'
+                
+				//publishing the robot test results
+                step([
+				$class : 'RobotPublisher',
+				outputPath : 'output/',
+				outputFileName : "*.xml",
+				disableArchiveOutput : false,
+				passThreshold : 100,
+				unstableThreshold: 95.0,
+				otherFiles : "*.png",
+			])
+		}    
     }
 }
